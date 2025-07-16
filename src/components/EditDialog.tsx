@@ -7,8 +7,13 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  FormControl,
   FormControlLabel,
+  InputLabel,
+  MenuItem,
+  Select,
   TextField,
+  type SelectChangeEvent,
 } from "@mui/material";
 import type { AppDispatch, RootState } from "./store/store";
 import type { Employee } from "./store/types";
@@ -26,13 +31,33 @@ export default function EditDialog() {
   );
   console.log(currentEmployee);
 
-  if (!currentEmployee) {
-    return null; 
-  }
+  const [roleValue, setRoleValue] = React.useState<string>(
+    currentEmployee?.role || ""
+  );
+  const [isArchive, setIsArchive] = React.useState(false);
+
+  React.useEffect(() => {
+    if (currentEmployee) {
+      setRoleValue(currentEmployee.role);
+      setIsArchive(currentEmployee.isArchive);
+    }
+  }, [currentEmployee]);
 
   const switchEditDialogStatus = () => {
     dispatch(EditHandleClick());
   };
+
+  const roleHandleChange = (event: SelectChangeEvent) => {
+    const value = event.target.value as string;
+    setRoleValue(value);
+    console.log(value);
+  };
+
+  const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setIsArchive(event.target.checked);
+  };
+
+  if (!currentEmployee) return null;
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -43,7 +68,7 @@ export default function EditDialog() {
       id: currentEmployee.id,
       name: form.fullname.value,
       isArchive: form.archived.checked,
-      role: form.job.value,
+      role: roleValue,
       phone: form.phone.value,
       birthday: form.birthday.value,
     };
@@ -51,7 +76,7 @@ export default function EditDialog() {
     console.log(newUser);
 
     dispatch(editUser(newUser));
-    dispatch(editEmployees(newUser))
+    dispatch(editEmployees(newUser));
     switchEditDialogStatus();
   };
 
@@ -80,19 +105,6 @@ export default function EditDialog() {
               defaultValue={currentEmployee?.name}
             />
             <TextField
-              autoFocus
-              required
-              margin="dense"
-              id="name"
-              name="job"
-              label="Role"
-              type="text"
-              fullWidth
-              variant="standard"
-              defaultValue={currentEmployee?.role}
-            />
-            <TextField
-              autoFocus
               required
               margin="dense"
               id="name"
@@ -104,7 +116,6 @@ export default function EditDialog() {
               defaultValue={currentEmployee?.phone}
             />
             <TextField
-              autoFocus
               required
               margin="dense"
               id="name"
@@ -115,20 +126,29 @@ export default function EditDialog() {
               variant="standard"
               defaultValue={currentEmployee?.birthday}
             />
-            {currentEmployee?.isArchive ? (
-              <FormControlLabel
-                control={<Checkbox name="archived" />}
-                label="Archived?"
-                sx={{ mt: "2%" }}
-                checked
-              />
-            ) : (
-              <FormControlLabel
-                control={<Checkbox name="archived" />}
-                label="Archived?"
-                sx={{ mt: "2%" }}
-              />
-            )}
+            <FormControl fullWidth sx={{ mt: 2, p: 0 }}>
+              <InputLabel id="demo-simple-select-label">Role</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={roleValue}
+                label="Age"
+                onChange={roleHandleChange}
+                required
+              >
+                <MenuItem value="driver">Driver</MenuItem>
+                <MenuItem value="waiter">Waiter</MenuItem>
+                <MenuItem value="cook">Cook</MenuItem>
+              </Select>
+            </FormControl>
+            <FormControlLabel
+              control={
+                <Checkbox name="archived" onChange={handleCheckboxChange} />
+              }
+              label="Archived?"
+              sx={{ mt: "2%" }}
+              checked={isArchive}
+            />
             <DialogActions sx={{ my: "2%" }}>
               <Button
                 color="error"

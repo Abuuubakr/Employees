@@ -43,7 +43,7 @@ function Employees() {
 
   const parseBirthday = (str: string): Date => {
     const [day, month, year] = str.split(".");
-    return new Date(+year, +month - 1, +day); // JS Date: (year, monthIndex, day)
+    return new Date(+year, +month - 1, +day);
   };
 
   const filteredEmployee = employees

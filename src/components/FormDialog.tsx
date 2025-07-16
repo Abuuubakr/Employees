@@ -6,8 +6,13 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  FormControl,
   FormControlLabel,
+  InputLabel,
+  MenuItem,
+  Select,
   TextField,
+  type SelectChangeEvent,
 } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { handleClick } from "./store/DialogSlice";
@@ -16,38 +21,42 @@ import type { Employee } from "./store/types";
 import { addEmployees, addUser } from "./store/TableSlice";
 
 export default function FormDialog() {
-  const dialogStatus = useSelector((state : RootState) => state.dialog.dialog);
+  const dialogStatus = useSelector((state: RootState) => state.dialog.dialog);
   const dispatch = useDispatch<AppDispatch>();
 
+  const [ roleValue, setRoleValue ] = React.useState<string>('')
 
   const switchDialogStatus = () => {
     dispatch(handleClick());
   };
 
-  const employees = useSelector(
-    (state: RootState) => state.table.employees
-  );
+  const roleHandleChange = (event: SelectChangeEvent) => {
+    const value = event.target.value as string;
+    setRoleValue(value)
+    console.log(value);
+  };
 
+  const employees = useSelector((state: RootState) => state.table.employees);
 
-  const handleSubmit = (e : React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const form = e.target as HTMLFormElement
+    const form = e.target as HTMLFormElement;
 
     const newUser: Employee = {
       id: (Number(employees[employees.length - 1].id) + 1).toString(),
       name: form.fullname.value,
       isArchive: form.archived.checked,
-      role: form.job.value,
+      role: roleValue,
       phone: form.phone.value,
       birthday: form.birthday.value,
     };
 
-   console.log(newUser);
-   
-    dispatch(addUser(newUser))
-    dispatch(addEmployees(newUser))
-    switchDialogStatus()
+    console.log(newUser);
+
+    dispatch(addUser(newUser));
+    dispatch(addEmployees(newUser));
+    switchDialogStatus();
   };
 
   return (
@@ -74,17 +83,6 @@ export default function FormDialog() {
               required
               margin="dense"
               id="name"
-              name="job"
-              label="Role"
-              type="text"
-              fullWidth
-              variant="standard"
-            />
-            <TextField
-              autoFocus
-              required
-              margin="dense"
-              id="name"
               name="phone"
               label="Phone"
               type="text"
@@ -102,14 +100,37 @@ export default function FormDialog() {
               fullWidth
               variant="standard"
             />
+            <FormControl fullWidth sx={{ mt: 2, p: 0 }}>
+              <InputLabel id="demo-simple-select-label">Role</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={roleValue}
+                label="Age"
+                onChange={roleHandleChange}
+                required
+              >
+                <MenuItem value="driver">Driver</MenuItem>
+                <MenuItem value="waiter">Waiter</MenuItem>
+                <MenuItem value="cook">Cook</MenuItem>
+              </Select>
+            </FormControl>
             <FormControlLabel
               control={<Checkbox name="archived" />}
               label="Archived?"
               sx={{ mt: "2%" }}
             />
-            <DialogActions sx={{my : '2%'}} >
-              <Button color="error" variant="contained" onClick={switchDialogStatus}>Cancel</Button>
-              <Button  variant="contained" type="submit">Submit</Button>
+            <DialogActions sx={{ my: "2%" }}>
+              <Button
+                color="error"
+                variant="contained"
+                onClick={switchDialogStatus}
+              >
+                Cancel
+              </Button>
+              <Button variant="contained" type="submit">
+                Submit
+              </Button>
             </DialogActions>
           </form>
         </DialogContent>
