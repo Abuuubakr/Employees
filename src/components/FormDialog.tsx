@@ -17,7 +17,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { handleClick } from "./store/DialogSlice";
 import type { AppDispatch, RootState } from "./store/store";
-import type { Employee } from "./store/types";
+import type { newEmployee } from "./store/types";
 import { addEmployees, addUser } from "./store/TableSlice";
 
 export default function FormDialog() {
@@ -36,15 +36,12 @@ export default function FormDialog() {
     console.log(value);
   };
 
-  const employees = useSelector((state: RootState) => state.table.employees);
-
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const form = e.target as HTMLFormElement;
 
-    const newUser: Employee = {
-      id: (Number(employees[employees.length - 1].id) + 1).toString(),
+    const newUser: newEmployee = {
       name: form.fullname.value,
       isArchive: form.archived.checked,
       role: roleValue,

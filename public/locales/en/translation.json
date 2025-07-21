@@ -1,0 +1,20 @@
+{
+    "add" : "Add Employees",
+    "all" : "All",
+    "lang" : "Lang",
+
+    "driver" : "Driver",
+    "waiter" : "Waiter",
+    "cook" : "Cook",
+
+    "archived" : "Archived",
+    "unarchived" : "Unarchived",
+    
+    "name" : "Name", 
+    "archive" : "IsArchive",
+    "role" : "Role",
+    "phone" : "Phone",
+    "birthday" : "Birthday",
+    "edit" : "Edit",
+    "delete" : "Delete"
+}

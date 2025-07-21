@@ -7,3 +7,11 @@ export type Employee = {
   birthday: string;
 };
 
+export type newEmployee = {
+  name: string;
+  isArchive: boolean;
+  role: string;
+  phone: string;
+  birthday: string;
+};
+

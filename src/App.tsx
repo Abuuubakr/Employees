@@ -5,10 +5,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { handleClick } from "./components/store/DialogSlice";
 import type { RootState } from "./components/store/store";
 import Filters from "./components/Filters";
+import { useTranslation } from "react-i18next";
 
 function App() {
   const dispatch = useDispatch();
   const { error } = useSelector((state: RootState) => state.table);
+
+  const  { t } = useTranslation()
 
   return (
     <>
@@ -16,22 +19,26 @@ function App() {
         {error ? (
           <h1>An error ocurred: {error}</h1>
         ) : (
-          <Container>
-            <div className="flex justify-between mb-[2%]">
-              <div className="flex start">
+          <div>
+            <div className="flex justify-between mb-[2%] items-center">
+              <div className=" h-[53px]">
                 <Button
-                  sx={{ mb: "2%" }}
+                  sx={{ mb: "2%", height : '53px' }}
                   variant="contained"
                   color="success"
                   onClick={() => dispatch(handleClick())}
                 >
-                  Add Employees
+                  {t('add')}
                 </Button>
               </div>
-                <Filters/>
+              <div className="max-[1200px]:w-[10%] w-[32%] h-[10vh]">
+                <Filters />
+              </div>
             </div>
-            <Employees />
-          </Container>
+            <div>
+              <Employees />
+            </div>
+          </div>
         )}
       </div>
     </>

@@ -19,6 +19,7 @@ import { fetchEmployees } from "./store/TableSlice";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import Employee from "./Employee";
+import { useTranslation } from "react-i18next";
 
 function Employees() {
   const dispatch = useDispatch<AppDispatch>();
@@ -69,6 +70,9 @@ function Employees() {
     dispatch(fetchEmployees());
   }, [dispatch]);
 
+    const { t } = useTranslation();
+  
+
   const renderSkeleton = () => (
     <TableRow>
       {Array.from({ length: 8 }).map((_, idx) => (
@@ -85,9 +89,9 @@ function Employees() {
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
             <TableRow>
-              <TableCell>Id</TableCell>
+              <TableCell>№</TableCell>
               <TableCell align="center">
-                Name{" "}
+                {t("name")}{" "}
                 <IconButton
                   aria-label="sort"
                   color={isNameSorted ? "info" : "default"}
@@ -96,11 +100,11 @@ function Employees() {
                   <SwapVertIcon />
                 </IconButton>
               </TableCell>
-              <TableCell align="center">IsArchive</TableCell>
-              <TableCell align="center">Role</TableCell>
-              <TableCell align="center">Phone</TableCell>
+              <TableCell align="center">{t("archive")}</TableCell>
+              <TableCell align="center">{t("role")}</TableCell>
+              <TableCell align="center">{t("phone")}</TableCell>
               <TableCell align="center">
-                Birthday
+                {t("birthday")}
                 <IconButton
                   aria-label="sort"
                   color={isBirthSorted ? "info" : "default"}
@@ -109,15 +113,15 @@ function Employees() {
                   <SwapVertIcon />
                 </IconButton>
               </TableCell>
-              <TableCell align="center">Edit</TableCell>
-              <TableCell align="center">Delete</TableCell>
+              <TableCell align="center">{t("edit")}</TableCell>
+              <TableCell align="center">{t("delete")}</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {status === "loading"
               ? Array.from({ length: 5 }).map(() => renderSkeleton())
-              : finalEmployees.map((row: EmployeeType) => (
-                  <Employee key={row.id} row={row} />
+              : finalEmployees.map((row: EmployeeType, index : number) => (
+                  <Employee key={index} row={row} index={index}/>
                 ))}
           </TableBody>
         </Table>

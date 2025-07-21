@@ -3,7 +3,7 @@ import {
   createSlice,
   type PayloadAction,
 } from "@reduxjs/toolkit";
-import type { Employee } from "./types";
+import type { Employee, newEmployee } from "./types";
 
 type sliceType = {
   employees: Employee[];
@@ -60,8 +60,8 @@ export const deleteEmployees = createAsyncThunk<
 });
 
 export const addEmployees = createAsyncThunk<
-  Employee,
-  Employee,
+  newEmployee,
+  newEmployee,
   { rejectValue: string }
 >("employees/addEmployees", async function (newUser, { rejectWithValue }) {
   try {
