@@ -22,8 +22,6 @@ function Filters() {
 
 
   const { role, archive } = filtersValue;
-  console.log(role);
-  console.log(archive);
 
   const roleHandleChange = (event: SelectChangeEvent) => {
     const value = event.target.value as string;
@@ -46,8 +44,8 @@ function Filters() {
   };
 
   return (
-    <div className="flex max-[1200px]:flex-col justify-between  mr-[1%]">
-      <div>
+    <div className="flex max-[1200px]:flex-col justify-between">
+      <div className="max-[1200px]:mb-[12px] min-[1200px]:mr-[12px]">
         <Box sx={{ minWidth: 120 }}>
           <FormControl fullWidth>
             <InputLabel id="demo-simple-select-label">{t('role')}</InputLabel>
@@ -66,7 +64,7 @@ function Filters() {
           </FormControl>
         </Box>
       </div>
-      <div>
+      <div className="max-[1200px]:mb-[12px] min-[1200px]:mr-[12px]">
         <Box sx={{ minWidth: 120 }}>
           <FormControl fullWidth>
             <InputLabel id="demo-simple-select-label">{t('archive')}</InputLabel>

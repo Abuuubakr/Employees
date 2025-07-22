@@ -16,5 +16,12 @@
     "phone" : "Phone",
     "birthday" : "Birthday",
     "edit" : "Edit",
-    "delete" : "Delete"
+    "delete" : "Delete",
+
+    
+    "addthis" : "Add a new Employee",
+    "editThis" : "Edit this Employee",
+    "fullname" : "Fullname",
+    "cancel" : "Cancel",
+    "submit" : "Confirm"
 }

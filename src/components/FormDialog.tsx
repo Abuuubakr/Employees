@@ -19,12 +19,14 @@ import { handleClick } from "./store/DialogSlice";
 import type { AppDispatch, RootState } from "./store/store";
 import type { newEmployee } from "./store/types";
 import { addEmployees, addUser } from "./store/TableSlice";
+import { useTranslation } from "react-i18next";
 
 export default function FormDialog() {
   const dialogStatus = useSelector((state: RootState) => state.dialog.dialog);
   const dispatch = useDispatch<AppDispatch>();
 
-  const [ roleValue, setRoleValue ] = React.useState<string>('')
+  const [roleValue, setRoleValue] = React.useState<string>("");
+  const { t } = useTranslation();
 
   const switchDialogStatus = () => {
     dispatch(handleClick());
@@ -32,8 +34,7 @@ export default function FormDialog() {
 
   const roleHandleChange = (event: SelectChangeEvent) => {
     const value = event.target.value as string;
-    setRoleValue(value)
-    console.log(value);
+    setRoleValue(value);
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -60,7 +61,7 @@ export default function FormDialog() {
     <React.Fragment>
       <Dialog open={dialogStatus} onClose={switchDialogStatus} maxWidth={"xs"}>
         <DialogTitle sx={{ borderBottom: "1px solid gray" }}>
-          Add a new Employee
+          {t("addthis")}
         </DialogTitle>
         <DialogContent sx={{ paddingBottom: 0 }}>
           <form onSubmit={handleSubmit}>
@@ -70,7 +71,7 @@ export default function FormDialog() {
               margin="dense"
               id="name"
               name="fullname"
-              label="Fullname"
+              label={t('fullname')}
               type="text"
               fullWidth
               variant="standard"
@@ -81,7 +82,7 @@ export default function FormDialog() {
               margin="dense"
               id="name"
               name="phone"
-              label="Phone"
+              label={t('phone')}
               type="text"
               fullWidth
               variant="standard"
@@ -92,13 +93,13 @@ export default function FormDialog() {
               margin="dense"
               id="name"
               name="birthday"
-              label="Birthday"
+              label={t('birthday')}
               type="text"
               fullWidth
               variant="standard"
             />
             <FormControl fullWidth sx={{ mt: 2, p: 0 }}>
-              <InputLabel id="demo-simple-select-label">Role</InputLabel>
+              <InputLabel id="demo-simple-select-label">{t('role')}</InputLabel>
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
@@ -107,14 +108,14 @@ export default function FormDialog() {
                 onChange={roleHandleChange}
                 required
               >
-                <MenuItem value="driver">Driver</MenuItem>
-                <MenuItem value="waiter">Waiter</MenuItem>
-                <MenuItem value="cook">Cook</MenuItem>
+                <MenuItem value="driver">{t('driver')}</MenuItem>
+                <MenuItem value="waiter">{t('waiter')}</MenuItem>
+                <MenuItem value="cook">{t('cook')}</MenuItem>
               </Select>
             </FormControl>
             <FormControlLabel
               control={<Checkbox name="archived" />}
-              label="Archived?"
+              label={t('archive')}
               sx={{ mt: "2%" }}
             />
             <DialogActions sx={{ my: "2%" }}>
@@ -123,10 +124,10 @@ export default function FormDialog() {
                 variant="contained"
                 onClick={switchDialogStatus}
               >
-                Cancel
+                {t('cancel')}
               </Button>
               <Button variant="contained" type="submit">
-                Submit
+                {t('submit')}
               </Button>
             </DialogActions>
           </form>

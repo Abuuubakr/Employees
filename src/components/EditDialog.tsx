@@ -19,6 +19,7 @@ import type { AppDispatch, RootState } from "./store/store";
 import type { Employee } from "./store/types";
 import { EditHandleClick } from "./store/EditDialogSlice";
 import { editEmployees, editUser } from "./store/TableSlice";
+import { useTranslation } from "react-i18next";
 
 export default function EditDialog() {
   const dispatch = useDispatch<AppDispatch>();
@@ -29,12 +30,12 @@ export default function EditDialog() {
   const currentEmployee = useSelector(
     (state: RootState) => state.EditDialog.selectedRow
   );
-  console.log(currentEmployee);
 
   const [roleValue, setRoleValue] = React.useState<string>(
     currentEmployee?.role || ""
   );
   const [isArchive, setIsArchive] = React.useState(false);
+  const { t } = useTranslation()
 
   React.useEffect(() => {
     if (currentEmployee) {
@@ -50,7 +51,6 @@ export default function EditDialog() {
   const roleHandleChange = (event: SelectChangeEvent) => {
     const value = event.target.value as string;
     setRoleValue(value);
-    console.log(value);
   };
 
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -73,8 +73,6 @@ export default function EditDialog() {
       birthday: form.birthday.value,
     };
 
-    console.log(newUser);
-
     dispatch(editUser(newUser));
     dispatch(editEmployees(newUser));
     switchEditDialogStatus();
@@ -88,7 +86,7 @@ export default function EditDialog() {
         maxWidth={"xs"}
       >
         <DialogTitle sx={{ borderBottom: "1px solid gray" }}>
-          Edit this Employee
+          {t('editThis')}
         </DialogTitle>
         <DialogContent sx={{ paddingBottom: 0 }}>
           <form onSubmit={handleSubmit}>
@@ -98,7 +96,7 @@ export default function EditDialog() {
               margin="dense"
               id="name"
               name="fullname"
-              label="Fullname"
+              label={t('fullname')}
               type="text"
               fullWidth
               variant="standard"
@@ -109,7 +107,7 @@ export default function EditDialog() {
               margin="dense"
               id="name"
               name="phone"
-              label="Phone"
+              label={t('phone')}
               type="text"
               fullWidth
               variant="standard"
@@ -120,32 +118,31 @@ export default function EditDialog() {
               margin="dense"
               id="name"
               name="birthday"
-              label="Birthday"
+              label={t('birthday')}
               type="text"
               fullWidth
               variant="standard"
               defaultValue={currentEmployee?.birthday}
             />
             <FormControl fullWidth sx={{ mt: 2, p: 0 }}>
-              <InputLabel id="demo-simple-select-label">Role</InputLabel>
+              <InputLabel id="demo-simple-select-label">{t('role')}</InputLabel>
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
                 value={roleValue}
-                label="Age"
                 onChange={roleHandleChange}
                 required
               >
-                <MenuItem value="driver">Driver</MenuItem>
-                <MenuItem value="waiter">Waiter</MenuItem>
-                <MenuItem value="cook">Cook</MenuItem>
+                <MenuItem value="driver">{t('driver')}</MenuItem>
+                <MenuItem value="waiter">{t('waiter')}</MenuItem>
+                <MenuItem value="cook">{t('cook')}</MenuItem>
               </Select>
             </FormControl>
             <FormControlLabel
               control={
                 <Checkbox name="archived" onChange={handleCheckboxChange} />
               }
-              label="Archived?"
+              label={t('archive')}
               sx={{ mt: "2%" }}
               checked={isArchive}
             />
@@ -155,10 +152,10 @@ export default function EditDialog() {
                 variant="contained"
                 onClick={switchEditDialogStatus}
               >
-                Cancel
+                {t('cancel')}
               </Button>
               <Button variant="contained" type="submit">
-                Submit
+                {t('submit')}
               </Button>
             </DialogActions>
           </form>

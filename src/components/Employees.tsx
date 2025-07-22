@@ -46,7 +46,7 @@ function Employees() {
     const [day, month, year] = str.split(".");
     return new Date(+year, +month - 1, +day);
   };
-
+  
   const filteredEmployee = employees
     .filter((e) => role === "all" || e.role === role)
     .filter((e) => newArchive === "all" || e.isArchive === newArchive);
@@ -85,8 +85,8 @@ function Employees() {
 
   return (
     <>
-      <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+      <TableContainer component={Paper} sx={{width : '100%'}}>
+        <Table sx={{ minWidth: '780px' }} >
           <TableHead>
             <TableRow>
               <TableCell>№</TableCell>
@@ -117,7 +117,7 @@ function Employees() {
               <TableCell align="center">{t("delete")}</TableCell>
             </TableRow>
           </TableHead>
-          <TableBody>
+          <TableBody sx={{overflowX : 'hidden'}}>
             {status === "loading"
               ? Array.from({ length: 5 }).map(() => renderSkeleton())
               : finalEmployees.map((row: EmployeeType, index : number) => (

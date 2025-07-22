@@ -1,10 +1,12 @@
-import { Button, Checkbox, TableCell, TableRow } from "@mui/material";
+import { Button, Checkbox, TableCell, TableRow, useMediaQuery } from "@mui/material";
 import { useDispatch } from "react-redux";
 import { deleteEmployees, removeUser } from "./store/TableSlice";
 import { EditHandleClick } from "./store/EditDialogSlice";
 import type { Employee as EmployeeType } from "./store/types";
 import type { AppDispatch } from "./store/store";
 import { useTranslation } from "react-i18next";
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
 
 type myProps = {
   row: EmployeeType;
@@ -20,11 +22,12 @@ function Employee({ row, index }: myProps) {
   };
 
   const { t } = useTranslation();
+  const isTabletSize = useMediaQuery('(max-width:870px)')
 
   return (
     <TableRow
       key={row.name}
-      sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+      sx={{ "&:last-child td, &:last-child th": { border: 0 }, width : '100%' }}
     >
       <TableCell component="th" scope="row">
         {index + 1}
@@ -46,7 +49,7 @@ function Employee({ row, index }: myProps) {
           color="warning"
           onClick={() => dispatch(EditHandleClick(row))}
         >
-          {t("edit")}
+          {isTabletSize ? <EditIcon/> : t('edit')}
         </Button>
       </TableCell>
       <TableCell align="center">
@@ -55,7 +58,7 @@ function Employee({ row, index }: myProps) {
           variant="contained"
           color="error"
         >
-          {t("delete")}
+          {isTabletSize ? <DeleteIcon/> : t('delete')}
         </Button>
       </TableCell>
     </TableRow>
