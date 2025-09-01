@@ -18,8 +18,8 @@ import { useEffect, useState } from "react";
 import { fetchEmployees } from "./store/TableSlice";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
-import Employee from "./Employee";
 import { useTranslation } from "react-i18next";
+import Employee from "./Employee";
 
 function Employees() {
   const dispatch = useDispatch<AppDispatch>();
@@ -46,37 +46,64 @@ function Employees() {
     const [day, month, year] = str.split(".");
     return new Date(+year, +month - 1, +day);
   };
-  
+
   const filteredEmployee = employees
     .filter((e) => role === "all" || e.role === role)
     .filter((e) => newArchive === "all" || e.isArchive === newArchive);
 
-  const finalEmployees = [...filteredEmployee].sort((a, b) => {
-    if (isNameSorted) {
+  const getNameSortedEmployees = (employee: Employee[]) => {
+    const nameSortedEmployees = employee.sort((a, b) => {
       const nameCompare = a.name.localeCompare(b.name);
       if (nameCompare !== 0) return nameCompare;
-    }
+    });
+    return nameSortedEmployees;
+  };
 
-    if (isBirthSorted) {
+  const getBirthSortedEmployee = (employees: Employee[]) => {
+    const birthSortedEmployees = employees.sort((a, b) => {
       const dateA = parseBirthday(a.birthday).getTime();
       const dateB = parseBirthday(b.birthday).getTime();
       return dateA - dateB;
+    });
+    return birthSortedEmployees;
+  };
+
+  const getSortedEmployee = (employees: EmployeeType[]) => {
+    if (isNameSorted) {
+      return getNameSortedEmployees([...employees]);
     }
 
-    return 0;
-  });
+    if (isBirthSorted) {
+      getBirthSortedEmployee([...employees]);
+    }
+
+    return employees;
+  };
+
+  const finalEmployees = getSortedEmployee(filteredEmployee);
+  console.log(finalEmployees);
+
+  // if (isNameSorted) {
+  //     const nameCompare = a.name.localeCompare(b.name);
+  //     if (nameCompare !== 0) return nameCompare;
+  //   }
+
+  //   if (isBirthSorted) {
+  //     const dateA = parseBirthday(a.birthday).getTime();
+  //     const dateB = parseBirthday(b.birthday).getTime();
+  //     return dateA - dateB;
+  //   }
 
   useEffect(() => {
     dispatch(fetchEmployees());
   }, [dispatch]);
 
-    const { t } = useTranslation();
-  
+  const { t } = useTranslation();
 
-  const renderSkeleton = () => (
-    <TableRow>
-      {Array.from({ length: 8 }).map((_, idx) => (
-        <TableCell key={idx}>
+  const renderSkeleton = (rowIdx: number) => (
+    <TableRow key={`skeleton-row-${rowIdx}`}>
+      {Array.from({ length: 8 }).map((_, colIdx) => (
+        <TableCell key={`skeleton-cell-${rowIdx}-${colIdx}`}>
           <Skeleton height={30} />
         </TableCell>
       ))}
@@ -85,8 +112,8 @@ function Employees() {
 
   return (
     <>
-      <TableContainer component={Paper} sx={{width : '100%'}}>
-        <Table sx={{ minWidth: '780px' }} >
+      <TableContainer component={Paper} sx={{ width: "100%" }}>
+        <Table sx={{ minWidth: "780px" }}>
           <TableHead>
             <TableRow>
               <TableCell>№</TableCell>
@@ -117,11 +144,11 @@ function Employees() {
               <TableCell align="center">{t("delete")}</TableCell>
             </TableRow>
           </TableHead>
-          <TableBody sx={{overflowX : 'hidden'}}>
+          <TableBody sx={{ overflowX: "hidden" }}>
             {status === "loading"
-              ? Array.from({ length: 5 }).map(() => renderSkeleton())
-              : finalEmployees.map((row: EmployeeType, index : number) => (
-                  <Employee key={index} row={row} index={index}/>
+              ? Array.from({ length: 5 }).map((_, idx) => renderSkeleton(idx))
+              : finalEmployees.map((row: EmployeeType, index: number) => (
+                  <Employee key={row.id} row={row} index={index} />
                 ))}
           </TableBody>
         </Table>

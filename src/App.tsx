@@ -17,7 +17,7 @@ function App() {
 
   return (
     <>
-      <Container maxWidth="lg" sx={{ overflowX: "auto" }}>
+      <Container maxWidth="lg"  sx={{ overflowX: "auto", mx : '0' }}>
         <div>
           {error ? (
             <h1>An error ocurred: {error}</h1>
@@ -38,7 +38,7 @@ function App() {
                   <Filters />
                 </div>
               </div>
-              <div>
+              <div className="max-[1200px]:mt-[4%]">
                 <Employees />
               </div>
             </div>
